@@ -16,7 +16,8 @@ new p5((p) => {
    *   score: number,
    *   lives: number,
    *   gameOver: boolean,
-   *   cleared: boolean
+   *   cleared: boolean,
+   *   title: boolean
    * }}
    */
   const state = {
@@ -26,6 +27,7 @@ new p5((p) => {
     lives: 3,
     gameOver: false,
     cleared: false,
+    title: true,
   };
 
   /** @type {{ x: number, y: number, w: number, h: number }} */
@@ -148,7 +150,7 @@ new p5((p) => {
   }
 
   /**
-   * ゲームを初期状態に戻す。
+   * ゲームの状態をリセットする。
    * スコア・残機・ボール・ブロック配置をリセットする。
    */
   function resetGame() {
@@ -157,6 +159,7 @@ new p5((p) => {
     state.lives = 3;
     state.gameOver = false;
     state.cleared = false;
+    state.title = false;
     createBricks();
     spawnBall();
   }
@@ -233,7 +236,6 @@ new p5((p) => {
       h: 16,
     };
     createBricks();
-    spawnBall();
   };
 
   /**
@@ -267,6 +269,12 @@ new p5((p) => {
    * ゲーム終了・クリア時はリセットし、それ以外ではボールを追加発射する。
    */
   p.mousePressed = () => {
+    if (state.title) {
+      state.title = false;
+      spawnBall();
+      return;
+    }
+
     if (state.gameOver || state.cleared) {
       resetGame();
       return;
@@ -318,7 +326,7 @@ new p5((p) => {
     p.rectMode(p.CORNER);
 
     // プレイ中の更新処理
-    if (!state.gameOver && !state.cleared) {
+    if (!state.title && !state.gameOver && !state.cleared) {
       for (const ball of state.balls) {
         ball.update();
         ball.draw();
@@ -338,6 +346,18 @@ new p5((p) => {
       checkClear();
     } else {
       for (const ball of state.balls) ball.draw();
+    }
+
+    // タイトル画面
+    if (state.title) {
+      p.fill(0, 0, 0, 120);
+      p.rect(0, 0, p.width, p.height);
+      p.fill(255);
+      p.textAlign(p.CENTER, p.CENTER);
+      p.textSize(42);
+      p.text('BREAKOUT', p.width / 2, p.height / 2 - 20);
+      p.textSize(18);
+      p.text('クリックでスタート', p.width / 2, p.height / 2 + 24);
     }
 
     // ゲーム終了・クリア表示
