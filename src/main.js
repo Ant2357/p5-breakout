@@ -2,6 +2,12 @@ import p5 from 'p5';
 
 new p5((p) => {
   /**
+   * ボールの跳ね返り音を保持する変数。
+   * @type {HTMLAudioElement}
+   */
+  let bounceSE;
+
+  /**
    * ゲーム全体の状態を管理するオブジェクト。
    * @type {{
    *   balls: Ball[],
@@ -77,16 +83,19 @@ new p5((p) => {
       if (this.pos.x < this.r) {
         this.pos.x = this.r;
         this.vel.x *= -1;
+        playBounceSE();
       }
       if (this.pos.x > p.width - this.r) {
         this.pos.x = p.width - this.r;
         this.vel.x *= -1;
+        playBounceSE();
       }
 
       // 上の壁で反射する
       if (this.pos.y < this.r) {
         this.pos.y = this.r;
         this.vel.y *= -1;
+        playBounceSE();
       }
 
       // 画面下まで落ちたら消滅扱いにする
@@ -110,6 +119,7 @@ new p5((p) => {
           this.pos.y - this.r <= paddle.y + paddle.h / 2) {
         this.pos.y = paddle.y - paddle.h / 2 - this.r;
         this.vel.y *= -1;
+        playBounceSE();
 
         const offset = (this.pos.x - paddle.x) / (paddle.w / 2);
         this.vel.x += offset * 1.8;
@@ -133,6 +143,7 @@ new p5((p) => {
           brick.hit = true;
           state.score += 10;
           this.vel.y *= -1;
+          playBounceSE();
           this.bounces += 1;
           break;
         }
@@ -224,11 +235,30 @@ new p5((p) => {
   }
 
   /**
+   * ボールの跳ね返り音を再生する。
+   */
+  function playBounceSE() {
+    if (!bounceSE) return;
+
+    // 連続再生できるように毎回複製する
+    const sound = bounceSE.cloneNode();
+    sound.volume = 0.5;
+    sound.play().catch(() => {});
+  }
+
+  /**
    * 初期化処理。
    * キャンバス作成、パドル初期位置設定、ブロック生成、初回ボール発射を行う。
    */
   p.setup = () => {
     p.createCanvas(p.windowWidth, p.windowHeight);
+
+    // 音源利用規約厳守の為、音源は直リンク(著者判断の非公開できる仕様)
+    bounceSE = new Audio(
+      'https://dova-worker.tracks-cid.workers.dev?filepath=se%2Faudio%2F3db0fb2b-63ee-435f-a473-0d6e51e2fb1a.mp3&expires=1782803784&token=af245702f704beac17082a61f503c10988c9ae50de5f2ce72e58ec9321bd6aa0'
+    );
+    bounceSE.preload = "auto";
+
     paddle = {
       x: p.width / 2,
       y: p.height - 44,
