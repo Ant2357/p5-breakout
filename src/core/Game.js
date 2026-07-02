@@ -7,10 +7,18 @@ import BrickFactory from "../factories/BrickFactory";
 import CollisionService from "../services/CollisionService";
 import Renderer from "../ui/Renderer";
 
+/**
+ * ブロック崩しゲーム全体を管理するクラス。
+ *
+ * ゲーム状態、ボール・パドル・ブロックの生成、
+ * 更新処理、描画処理、入力処理を統括する。
+ */
 export default class Game {
   /**
-   * @param {p5} p
-   * @param {AudioService} audio
+   * Game インスタンスを生成します。
+   *
+   * @param {p5} p p5.js インスタンス
+   * @param {AudioService} audio 効果音を再生するサービス
    */
   constructor(p, audio) {
     this.p = p;
@@ -36,17 +44,41 @@ export default class Game {
     this.createBricks();
   }
 
+  /**
+   * 現在のキャンバスサイズに合わせて
+   * ブロックを生成します。
+   *
+   * @returns {void}
+   */
   createBricks() {
     this.state.bricks =
       BrickFactory.create(this.p.width, 10, 5);
   }
 
+  /**
+   * ゲームを初期状態へリセットします。
+   *
+   * ライフ・スコア・ブロックなどを初期化し、
+   * 新しいボールを生成します。
+   *
+   * @returns {void}
+   */
   reset() {
     this.state.reset();
     this.createBricks();
     this.spawnBall();
   }
 
+  /**
+   * パドルの位置からボールを発射します。
+   *
+   * 指定した座標へ向かうように初速度を計算し、
+   * 新しいボールをゲームへ追加します。
+   *
+   * @param {number} [targetX=this.p.mouseX] 発射方向のX座標
+   * @param {number} [targetY=this.p.mouseY] 発射方向のY座標
+   * @returns {void}
+   */
   spawnBall(targetX = this.p.mouseX, targetY = this.p.mouseY) {
     const originX = this.paddle.x;
     const originY = this.paddle.y - this.paddle.h / 2 - 10;
@@ -75,6 +107,14 @@ export default class Game {
     );
   }
 
+  /**
+   * ゲームを1フレーム更新します。
+   *
+   * ボールの移動、衝突判定、
+   * ライフ管理、ゲームクリア判定を行います。
+   *
+   * @returns {void}
+   */
   update() {
     if (!this.state.isPlaying()) {
       return;
@@ -98,6 +138,11 @@ export default class Game {
     this.state.checkClear();
   }
 
+  /**
+   * ゲーム画面を描画します。
+   *
+   * @returns {void}
+   */
   draw() {
     this.renderer.draw(
       this.state,
@@ -105,6 +150,12 @@ export default class Game {
     );
   }
 
+  /**
+   * マウス移動時にパドルを移動します。
+   *
+   * @param {number} x マウスのX座標
+   * @returns {void}
+   */
   mouseMoved(x) {
     this.paddle.moveTo(
       x,
@@ -112,6 +163,16 @@ export default class Game {
     );
   }
 
+  /**
+   * マウスクリック時の処理を行います。
+   *
+   * タイトル画面の開始、ゲームオーバー後のリセット、
+   * または新しいボールの発射を行います。
+   *
+   * @param {number} x マウスのX座標
+   * @param {number} y マウスのY座標
+   * @returns {void}
+   */
   mousePressed(x, y) {
     if (this.state.title) {
       this.state.title = false;
@@ -127,12 +188,30 @@ export default class Game {
     this.spawnBall(x, y);
   }
 
+  /**
+   * キー入力時の処理を行います。
+   *
+   * Rキーが押された場合はゲームをリセットします。
+   *
+   * @param {string} key 押されたキー
+   * @returns {void}
+   */
   keyPressed(key) {
     if (key === "r" || key === "R") {
       this.reset();
     }
   }
 
+  /**
+   * キャンバスサイズ変更時の処理を行います。
+   *
+   * キャンバスサイズを更新し、
+   * パドル位置とブロック配置を再生成します。
+   *
+   * @param {number} width 新しいキャンバス幅
+   * @param {number} height 新しいキャンバス高さ
+   * @returns {void}
+   */
   resize(width, height) {
     this.p.resizeCanvas(width, height);
     this.paddle.y = height - 44;

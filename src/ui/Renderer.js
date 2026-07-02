@@ -1,17 +1,26 @@
+/**
+ * ゲーム画面の描画を管理するクラス。
+ */
 export default class Renderer {
 
   /**
-   * @param {p5} p
+   * Renderer インスタンスを生成します。
+   *
+   * @param {p5} p p5.js インスタンス
    */
   constructor(p) {
     this.p = p;
   }
 
   /**
-   * ゲーム全体を描画する
+   * ゲーム全体を描画します。
    *
-   * @param {GameState} state
-   * @param {Paddle} paddle
+   * ゲーム状態に応じて各オブジェクトを描画し、
+   * 必要に応じてタイトル画面または結果画面を表示します。
+   *
+   * @param {GameState} state ゲームの状態
+   * @param {Paddle} paddle プレイヤーのパドル
+   * @returns {void}
    */
   draw(state, paddle) {
     const p = this.p;
@@ -31,6 +40,11 @@ export default class Renderer {
     }
   }
 
+  /**
+   * ゲーム背景を描画します。
+   *
+   * @returns {void}
+   */
   drawBackground() {
     const p = this.p;
 
@@ -41,6 +55,12 @@ export default class Renderer {
     p.rect(0, 0, p.width, p.height);
   }
 
+  /**
+   * HUD（スコア・ライフ・操作説明）を描画します。
+   *
+   * @param {GameState} state ゲームの状態
+   * @returns {void}
+   */
   drawHUD(state) {
     const p = this.p;
 
@@ -56,6 +76,12 @@ export default class Renderer {
     );
   }
 
+  /**
+   * ブロックを描画します。
+   *
+   * @param {Brick[]} bricks 描画対象のブロック一覧
+   * @returns {void}
+   */
   drawBricks(bricks) {
     const p = this.p;
 
@@ -76,6 +102,12 @@ export default class Renderer {
     }
   }
 
+  /**
+   * パドルを描画します。
+   *
+   * @param {Paddle} paddle 描画対象のパドル
+   * @returns {void}
+   */
   drawPaddle(paddle) {
     const p = this.p;
 
@@ -92,6 +124,12 @@ export default class Renderer {
     p.rectMode(p.CORNER);
   }
 
+  /**
+   * ボールを描画します。
+   *
+   * @param {Ball[]} balls 描画対象のボール一覧
+   * @returns {void}
+   */
   drawBalls(balls) {
     const p = this.p;
 
@@ -107,6 +145,11 @@ export default class Renderer {
     }
   }
 
+  /**
+   * タイトル画面を描画します。
+   *
+   * @returns {void}
+   */
   drawTitle() {
     const p = this.p;
 
@@ -133,6 +176,12 @@ export default class Renderer {
     );
   }
 
+  /**
+   * ゲームオーバーまたはクリア画面を描画します。
+   *
+   * @param {GameState} state ゲームの状態
+   * @returns {void}
+   */
   drawResult(state) {
     const p = this.p;
 

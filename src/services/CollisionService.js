@@ -1,9 +1,17 @@
+/**
+ * ボールの衝突判定を管理するサービスクラス。
+ *
+ * 壁・パドル・ブロックとの衝突判定を行い、
+ * ゲーム状態やボールの挙動を更新します。
+ */
 export default class CollisionService {
 
   /**
-   * @param {p5} p
-   * @param {GameState} state
-   * @param {AudioService} audio
+   * CollisionService インスタンスを生成します。
+   *
+   * @param {p5} p p5.js インスタンス
+   * @param {GameState} state ゲームの状態
+   * @param {AudioService} audio 効果音を再生するサービス
    */
   constructor(p, state, audio) {
     this.p = p;
@@ -12,10 +20,13 @@ export default class CollisionService {
   }
 
   /**
-   * ボールの衝突判定
+   * ボールに対する衝突判定を行います。
    *
-   * @param {Ball} ball
-   * @param {Paddle} paddle
+   * 壁・パドル・ブロックとの衝突を順番に判定します。
+   *
+   * @param {Ball} ball 判定対象のボール
+   * @param {Paddle} paddle 判定対象のパドル
+   * @returns {void}
    */
   handle(ball, paddle) {
     this.handleWall(ball);
@@ -24,7 +35,13 @@ export default class CollisionService {
   }
 
   /**
-   * 壁との衝突
+   * ボールと壁との衝突判定を行います。
+   *
+   * 左右および上部の壁ではボールを反射し、
+   * 画面下まで落下した場合はボールを消滅させます。
+   *
+   * @param {Ball} ball 判定対象のボール
+   * @returns {void}
    */
   handleWall(ball) {
     if (ball.x < ball.radius) {
@@ -51,7 +68,14 @@ export default class CollisionService {
   }
 
   /**
-   * パドルとの衝突
+   * ボールとパドルとの衝突判定を行います。
+   *
+   * 衝突位置に応じて反射角度を調整し、
+   * ボールの速度が上限を超えないよう制限します。
+   *
+   * @param {Ball} ball 判定対象のボール
+   * @param {Paddle} paddle 判定対象のパドル
+   * @returns {void}
    */
   handlePaddle(ball, paddle) {
     if (
@@ -87,7 +111,13 @@ export default class CollisionService {
   }
 
   /**
-   * ブロックとの衝突
+   * ボールとブロックとの衝突判定を行います。
+   *
+   * 衝突したブロックを破壊し、
+   * スコアを加算してボールを反射させます。
+   *
+   * @param {Ball} ball 判定対象のボール
+   * @returns {void}
    */
   handleBricks(ball) {
     for (const brick of this.state.bricks) {

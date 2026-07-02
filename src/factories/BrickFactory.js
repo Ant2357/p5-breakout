@@ -1,19 +1,23 @@
 import Brick from "../entities/Brick";
 
+/**
+ * ブロックを生成するファクトリークラス。
+ */
 export default class BrickFactory {
 
   /**
-   * ブロックを生成する
+   * キャンバスサイズや行・列数に応じて、
+   * ブロックを等間隔で配置した配列を生成します。
    *
-   * @param {number} canvasWidth キャンバス幅
+   * @param {number} canvasWidth キャンバスの幅
    * @param {number} cols 横方向のブロック数
    * @param {number} rows 縦方向のブロック数
-   * @param {Object} [options]
-   * @param {number} [options.margin=32]
-   * @param {number} [options.top=72]
-   * @param {number} [options.gap=0]
-   * @param {number} [options.height=24]
-   * @returns {Brick[]}
+   * @param {Object} [options={}] 生成オプション
+   * @param {number} [options.margin=32] 左右の余白
+   * @param {number} [options.top=72] 最上段ブロックのY座標
+   * @param {number} [options.gap=0] ブロック同士の横方向の間隔
+   * @param {number} [options.height=24] ブロックの高さ
+   * @returns {Brick[]} 生成されたブロックの配列
    */
   static create(
     canvasWidth,
@@ -42,6 +46,7 @@ export default class BrickFactory {
       "#60a5fa"
     ];
 
+    /** @type {Brick[]} */
     const bricks = [];
 
     for (let row = 0; row < rows; row++) {

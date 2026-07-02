@@ -3,11 +3,20 @@ import p5 from "p5";
 import Game from "./core/Game";
 import AudioService from "./services/AudioService";
 
+/**
+ * ブロック崩しゲームのエントリーポイントです。
+ */
 new p5((p) => {
 
-  /** @type {Game} */
+  /**
+   * ゲーム本体です。
+   * @type {Game}
+   */
   let game;
 
+  /**
+   * p5.js の初期化時に呼び出されます。
+   */
   p.setup = () => {
     p.createCanvas(
       p.windowWidth,
@@ -24,11 +33,19 @@ new p5((p) => {
     );
   };
 
+  /**
+   * 毎フレーム呼び出されます。
+   *
+   * ゲームの更新および描画を行います。
+   */
   p.draw = () => {
     game.update();
     game.draw();
   };
 
+  /**
+   * ウィンドウサイズ変更時に呼び出されます。
+   */
   p.windowResized = () => {
     game.resize(
       p.windowWidth,
@@ -36,18 +53,27 @@ new p5((p) => {
     );
   };
 
+  /**
+   * マウス移動時に呼び出されます。
+   */
   p.mouseMoved = () => {
     game.mouseMoved(
       p.mouseX
     );
   };
 
+  /**
+   * マウスドラッグ時に呼び出されます。
+   */
   p.mouseDragged = () => {
     game.mouseMoved(
       p.mouseX
     );
   };
 
+  /**
+   * マウスクリック時に呼び出されます。
+   */
   p.mousePressed = () => {
     game.mousePressed(
       p.mouseX,
@@ -55,6 +81,9 @@ new p5((p) => {
     );
   };
 
+  /**
+   * キー入力時に呼び出されます。
+   */
   p.keyPressed = () => {
     game.keyPressed(
       p.key

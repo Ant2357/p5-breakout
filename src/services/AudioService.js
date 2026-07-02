@@ -1,15 +1,27 @@
+/**
+ * Audio を管理するサービスクラス。
+ */
 export default class AudioService {
 
   /**
-   * @param {string} bounceSEUrl
+   * AudioService インスタンスを生成します。
+   *
+   * @param {string} bounceSEUrl ボール反射音の音声ファイルURL
    */
   constructor(bounceSEUrl) {
+    /**
+     * ボール反射音の音声データです。
+     *
+     * @type {HTMLAudioElement}
+     */
     this.bounceSE = new Audio(bounceSEUrl);
     this.bounceSE.preload = "auto";
   }
 
   /**
-   * ボール反射音
+   * ボールの反射音を再生します。
+   *
+   * @returns {void}
    */
   playBounce() {
     const sound = this.bounceSE.cloneNode();
