@@ -2,6 +2,9 @@
 
 クリックするたびにボールを発射できるブロック崩しです。
 
+## ゲームの URL
+https://ant2357.github.io/p5-breakout/
+
 ## 起動
 
 ```bash
