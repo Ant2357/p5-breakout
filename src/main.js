@@ -1,7 +1,5 @@
 import p5 from "p5";
 
-import scream from "./assets/sounds/scream.mp3";
-
 import Game from "./core/Game";
 import AudioService from "./services/AudioService";
 
@@ -25,7 +23,8 @@ new p5((p) => {
       p.windowHeight
     );
 
-    const audio = new AudioService(scream);
+    const soundUrl = new URL('./assets/sounds/scream.mp3', import.meta.url).href;
+    const audio = new AudioService(soundUrl);
 
     game = new Game(
       p,
