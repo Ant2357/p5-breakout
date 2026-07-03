@@ -1,5 +1,7 @@
 import p5 from "p5";
 
+import scream from "./assets/sounds/scream.mp3";
+
 import Game from "./core/Game";
 import AudioService from "./services/AudioService";
 
@@ -23,9 +25,7 @@ new p5((p) => {
       p.windowHeight
     );
 
-    const audio = new AudioService(
-      "https://dova-worker.tracks-cid.workers.dev?filepath=se%2Faudio%2F3db0fb2b-63ee-435f-a473-0d6e51e2fb1a.mp3&expires=1782803784&token=af245702f704beac17082a61f503c10988c9ae50de5f2ce72e58ec9321bd6aa0"
-    );
+    const audio = new AudioService(scream);
 
     game = new Game(
       p,
