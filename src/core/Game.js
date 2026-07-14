@@ -120,6 +120,14 @@ export default class Game {
       return;
     }
 
+    for (const brick of this.state.bricks) {
+      brick.escape(
+        this.state.balls,
+        this.state.bricks,
+        this.p.width
+      );
+    }
+
     for (const ball of this.state.balls) {
       ball.update();
       this.collision.handle(ball, this.paddle);
